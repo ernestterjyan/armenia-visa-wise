@@ -10,15 +10,12 @@ const GaugeChart = ({ used, total, label, sublabel }: Props) => {
   const percentage = total > 0 ? clamped / total : 0;
   const remaining = total - clamped;
 
-  // SVG arc params
   const size = 200;
   const strokeWidth = 14;
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  const arcLength = circumference * 0.75; // 270 degrees
+  const arcLength = circumference * 0.75;
   const dashOffset = arcLength * (1 - percentage);
-
-  // Rotation to start from bottom-left
   const rotation = 135;
 
   const getColor = () => {
@@ -37,7 +34,6 @@ const GaugeChart = ({ used, total, label, sublabel }: Props) => {
               <stop offset="100%" stopColor="hsl(var(--primary-glow))" />
             </linearGradient>
           </defs>
-          {/* Track */}
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -48,7 +44,6 @@ const GaugeChart = ({ used, total, label, sublabel }: Props) => {
             transform={`rotate(${rotation} ${size / 2} ${size / 2})`}
             strokeLinecap="round"
           />
-          {/* Fill */}
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -61,10 +56,9 @@ const GaugeChart = ({ used, total, label, sublabel }: Props) => {
             transform={`rotate(${rotation} ${size / 2} ${size / 2})`}
           />
         </svg>
-        {/* Center text */}
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-4xl font-extrabold text-foreground leading-none">{remaining}</span>
-          <span className="text-sm text-muted-foreground mt-1">{"մdelays\u0574\u0576\u0561\u0581\u0565\u056C \u0567"}</span>
+          <span className="text-sm text-muted-foreground mt-1">{"\u0574\u0576\u0561\u0581\u0565\u056C \u0567"}</span>
         </div>
       </div>
       <div className="text-center mt-2">
