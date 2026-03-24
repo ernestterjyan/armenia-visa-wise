@@ -1,16 +1,36 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useSchengenCalculator } from "@/hooks/useSchengenCalculator";
+import HeroSection from "@/components/HeroSection";
+import TripInputSection from "@/components/TripInputSection";
+import VisualSummary from "@/components/VisualSummary";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const Index = () => {
+  const {
+    trips, plannedEntry, setPlannedEntry,
+    addTrip, removeTrip, clearAllTrips,
+    dashboard, result, calculate, timelineData,
+  } = useSchengenCalculator();
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="min-h-screen px-4 py-7 max-w-[1120px] mx-auto">
+      <HeroSection />
+      <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-5 mt-5 items-start">
+        <TripInputSection
+          trips={trips}
+          onAddTrip={addTrip}
+          onRemoveTrip={removeTrip}
+          onClearAll={clearAllTrips}
+          plannedEntry={plannedEntry}
+          onPlannedEntryChange={setPlannedEntry}
+          onCalculate={calculate}
+        />
+        <VisualSummary
+          dashboard={dashboard}
+          timelineData={timelineData}
+          result={result}
+        />
+      </div>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
