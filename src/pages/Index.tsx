@@ -2,6 +2,7 @@ import { useSchengenCalculator } from "@/hooks/useSchengenCalculator";
 import HeroSection from "@/components/HeroSection";
 import TripInputSection from "@/components/TripInputSection";
 import VisualSummary from "@/components/VisualSummary";
+import ResultCard from "@/components/ResultCard";
 
 const Index = () => {
   const {
@@ -11,9 +12,20 @@ const Index = () => {
   } = useSchengenCalculator();
 
   return (
-    <div className="min-h-screen px-4 py-7 max-w-[1120px] mx-auto">
+    <div className="min-h-screen px-4 py-6 md:py-10 max-w-2xl mx-auto">
       <HeroSection />
-      <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-5 mt-5 items-start">
+
+      {/* Main result card - the hero answer */}
+      <div className="mt-8">
+        <ResultCard
+          result={result}
+          dashboard={dashboard}
+          hasPlannedDate={!!plannedEntry}
+        />
+      </div>
+
+      {/* Input section */}
+      <div className="mt-6">
         <TripInputSection
           trips={trips}
           onAddTrip={addTrip}
@@ -23,6 +35,10 @@ const Index = () => {
           onPlannedEntryChange={setPlannedEntry}
           onCalculate={calculate}
         />
+      </div>
+
+      {/* Visual summary - gauge + timeline */}
+      <div className="mt-6">
         <VisualSummary
           dashboard={dashboard}
           timelineData={timelineData}
