@@ -32,81 +32,93 @@ const VisualSummary = ({ dashboard, timelineData, result }: Props) => {
   if (!hasData && !timelineData) return null;
 
   return (
-    <div className="space-y-5">
-      {/* Gauge — single large card */}
+    <section className="overflow-hidden rounded-xl border border-border bg-card shadow-[var(--shadow-card)]">
+      <div className="border-b border-border px-6 py-5">
+        <h2 className="text-lg font-semibold text-foreground">
+          {"\u0531\u0574\u0583\u0578\u0583 \u057A\u0561\u057F\u056F\u0565\u0580"}
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {"\u0555\u0563\u057F\u0561\u0563\u0578\u0580\u056E\u057E\u0561\u056E \u0585\u0580\u0565\u0580\u0568 \u0587 180-\u0585\u0580\u0575\u0561 \u057A\u0561\u057F\u0578\u0582\u0570\u0561\u0576\u0568"}
+        </p>
+      </div>
+
       {hasData && (
-        <div className="rounded-3xl bg-card border border-border p-8 md:p-10" style={{ boxShadow: "var(--shadow-card)" }}>
+        <div className="grid gap-6 px-6 py-5 lg:grid-cols-[220px_minmax(0,1fr)] lg:items-center">
           <GaugeChart
             used={usedDays}
             total={90}
             label={`${usedDays} / 90 ${"\u0585\u0580 \u0585\u0563\u057F\u0561\u0563\u0578\u0580\u056E\u057E\u0561\u056E"}`}
             sublabel={"180-\u0585\u0580\u0575\u0561 \u057A\u0561\u057F\u0578\u0582\u0570\u0561\u0576\u0578\u0582\u0574"}
           />
-          <div className="flex justify-center gap-6 mt-5">
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "var(--gradient-progress)" }} />
-              <span className="text-xs text-muted-foreground">{"\u0555\u0563\u057F\u0561\u0563\u0578\u0580\u056E\u057E\u0561\u056E"}</span>
+
+          <dl className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-lg border border-border bg-background px-4 py-4">
+              <dt className="text-sm text-muted-foreground">{"\u0555\u0563\u057F\u0561\u0563\u0578\u0580\u056E\u057E\u0561\u056E"}</dt>
+              <dd className="mt-1 text-xl font-semibold text-foreground">{usedDays}</dd>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-muted" />
-              <span className="text-xs text-muted-foreground">{"\u0544\u0576\u0561\u0581\u0561\u056E"}</span>
+            <div className="rounded-lg border border-border bg-background px-4 py-4">
+              <dt className="text-sm text-muted-foreground">{"\u0544\u0576\u0561\u0581\u0561\u056E"}</dt>
+              <dd className="mt-1 text-xl font-semibold text-foreground">{Math.max(0, 90 - usedDays)}</dd>
             </div>
-          </div>
+            <div className="rounded-lg border border-border bg-background px-4 py-4">
+              <dt className="text-sm text-muted-foreground">{"\u0533\u0580\u0561\u0576\u0581\u057E\u0561\u056E \u0578\u0582\u0572\u0587\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576"}</dt>
+              <dd className="mt-1 text-xl font-semibold text-foreground">{dashboard.tripCount}</dd>
+            </div>
+          </dl>
         </div>
       )}
 
-      {/* Timeline */}
       {timelineData && (
-        <div className="rounded-3xl bg-card border border-border p-6 md:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-bold text-foreground">{"180-\u0585\u0580\u0575\u0561 \u057A\u0561\u057F\u0578\u0582\u0570\u0561\u0576"}</h3>
-            <span className="text-[11px] text-muted-foreground">
+        <div className="border-t border-border px-6 py-5">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+            <h3 className="text-base font-semibold text-foreground">
+              {"180-\u0585\u0580\u0575\u0561 \u057A\u0561\u057F\u0578\u0582\u0570\u0561\u0576"}
+            </h3>
+            <span className="text-sm text-muted-foreground">
               {formatDateStr(timelineData.windowStart)} → {formatDateStr(timelineData.windowEnd)}
             </span>
           </div>
-          <div className="relative rounded-2xl bg-muted/30 overflow-hidden" style={{ height: "64px" }}>
-            <div className="absolute left-4 right-4 top-1/2 h-px bg-border -translate-y-1/2" />
-            {timelineData.trips.length === 0 ? (
-              <div className="absolute inset-0 flex items-center justify-center text-xs text-muted-foreground">
-                {"\u0531\u0575\u057D \u057A\u0561\u057F\u0578\u0582\u0570\u0561\u0576\u056B \u0574\u0565\u057B stay \u0579\u056F\u0561"}
-              </div>
-            ) : (
-              timelineData.trips.map((trip, i) => {
-                const startOffset = diffDaysInclusive(timelineData.windowStart, trip.entry) - 1;
-                const duration = diffDaysInclusive(trip.entry, trip.exit);
-                const leftPct = Math.max(2, (startOffset / timelineData.totalDays) * 96 + 2);
-                const widthPct = Math.max(1.5, (duration / timelineData.totalDays) * 96);
-                return (
-                  <div
-                    key={i}
-                    className="absolute rounded-full h-5 top-1/2 -translate-y-1/2 group cursor-default"
-                    style={{
-                      left: `${leftPct}%`,
-                      width: `${widthPct}%`,
-                      background: "var(--gradient-progress)",
-                      opacity: 0.8,
-                    }}
-                  >
-                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity bg-foreground text-background text-[10px] rounded-lg px-2 py-1 whitespace-nowrap pointer-events-none">
-                      {formatDateStr(trip.entry)} → {formatDateStr(trip.exit)} ({duration}{"\u0585\u0580"})
-                    </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-          <div className="flex justify-between text-[10px] text-muted-foreground mt-2 px-1">
-            <span>{formatDateStr(timelineData.windowStart)}</span>
-            <span>{formatDateStr(timelineData.windowEnd)}</span>
+
+          <div className="mt-4 rounded-lg border border-border bg-background px-4 py-5">
+            <div className="relative h-14 overflow-hidden rounded-md bg-muted/60">
+              <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-border" />
+              {timelineData.trips.length === 0 ? (
+                <div className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">
+                  {"\u0531\u0575\u057D \u057A\u0561\u057F\u0578\u0582\u0570\u0561\u0576\u056B \u0574\u0565\u057B \u0563\u0580\u0561\u0576\u0581\u057E\u0561\u056E \u0574\u0576\u0561\u056C\u0578\u0582 \u0585\u0580 \u0579\u056F\u0561\u0589"}
+                </div>
+              ) : (
+                timelineData.trips.map((trip, i) => {
+                  const startOffset = diffDaysInclusive(timelineData.windowStart, trip.entry) - 1;
+                  const duration = diffDaysInclusive(trip.entry, trip.exit);
+                  const leftPct = Math.max(0, (startOffset / timelineData.totalDays) * 100);
+                  const widthPct = Math.max(1, (duration / timelineData.totalDays) * 100);
+
+                  return (
+                    <div
+                      key={i}
+                      className="absolute top-1/2 h-4 -translate-y-1/2 rounded-sm bg-primary/85"
+                      style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
+                      title={`${formatDateStr(trip.entry)} → ${formatDateStr(trip.exit)} (${duration} \u0585\u0580)`}
+                    />
+                  );
+                })
+              )}
+            </div>
+
+            <div className="mt-3 flex justify-between text-sm text-muted-foreground">
+              <span>{formatDateStr(timelineData.windowStart)}</span>
+              <span>{formatDateStr(timelineData.windowEnd)}</span>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Disclaimer */}
-      <p className="text-[11px] text-muted-foreground text-center leading-relaxed px-4">
-        {"\u0531\u0575\u057D \u0563\u0578\u0580\u056E\u056B\u0584\u0568 \u0585\u0563\u0576\u0561\u056F\u0561\u0576 \u0567\u0589 \u054E\u0565\u0580\u057B\u0576\u0561\u056F\u0561\u0576 \u0578\u0580\u0578\u0577\u0574\u0561\u0576 \u0570\u0561\u0574\u0561\u0580 \u0564\u056B\u0574\u0565\u0584 \u0570\u0561\u0574\u0561\u057A\u0561\u057F\u0561\u057D\u056D\u0561\u0576 \u056F\u0578\u0576\u057D\u0578\u0582\u056C\u0561\u057F\u0561\u0581\u056B\u0561\u0575\u056B\u0576\u0589"}
-      </p>
-    </div>
+      <div className="border-t border-border bg-muted/35 px-6 py-4">
+        <p className="text-sm leading-6 text-muted-foreground">
+          {"\u0531\u0575\u057D \u0563\u0578\u0580\u056E\u056B\u0584\u0568 \u0585\u0563\u0576\u0561\u056F\u0561\u0576 \u0567\u0589 \u054E\u0565\u0580\u057B\u0576\u0561\u056F\u0561\u0576 \u0578\u0580\u0578\u0577\u0574\u0561\u0576 \u0570\u0561\u0574\u0561\u0580 \u057D\u057F\u0578\u0582\u0563\u0565\u0584 \u0576\u0561\u0587 \u057A\u0561\u0577\u057F\u0578\u0576\u0561\u056F\u0561\u0576 \u0561\u0572\u0562\u0575\u0578\u0582\u0580\u0576\u0565\u0580\u0568\u0589"}
+        </p>
+      </div>
+    </section>
   );
 };
 

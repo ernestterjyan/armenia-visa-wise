@@ -1,46 +1,48 @@
-import { BookOpen, ShieldCheck, Clock3 } from "lucide-react";
-
 const AppGuide = () => {
   return (
-    <section className="rounded-3xl bg-card border border-border p-6 md:p-8" style={{ boxShadow: "var(--shadow-card)" }}>
-      <div className="flex items-center gap-3 mb-4">
-        <div className="w-10 h-10 rounded-xl bg-primary/8 flex items-center justify-center">
-          <BookOpen size={18} className="text-primary" />
-        </div>
-        <div>
-          <h2 className="text-lg font-bold text-foreground">Ինչպես օգտագործել</h2>
-          <p className="text-xs text-muted-foreground">Արագ ուղեցույց 90/180 հաշվարկի համար</p>
-        </div>
+    <section className="overflow-hidden rounded-xl border border-border bg-card shadow-[var(--shadow-card)]">
+      <div className="border-b border-border px-6 py-5">
+        <h2 className="text-lg font-semibold text-foreground">
+          {"\u053B\u0576\u0579\u057A\u0565\u057D \u0585\u0563\u057F\u0561\u0563\u0578\u0580\u056E\u0565\u056C"}
+        </h2>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {"\u053F\u0561\u0580\u0573 \u0568\u0576\u0569\u0561\u0581\u0584 90/180 \u0570\u0561\u0577\u057E\u0561\u0580\u056F\u056B \u0570\u0561\u0574\u0561\u0580"}
+        </p>
       </div>
 
-      <div className="space-y-3">
-        <div className="rounded-2xl border border-border bg-muted/20 p-3.5">
-          <p className="text-sm font-semibold text-foreground">1) Նշեք պլանավորված մուտքի օրը</p>
-          <p className="text-xs text-muted-foreground mt-1">Հաշվարկը կատարվում է հենց այդ օրվա համար:</p>
-        </div>
-        <div className="rounded-2xl border border-border bg-muted/20 p-3.5">
-          <p className="text-sm font-semibold text-foreground">2) Ավելացրեք նախորդ ուղևորությունները</p>
-          <p className="text-xs text-muted-foreground mt-1">Մուտք/ելք օրերը նշեք հնարավորինս ճշգրիտ:</p>
-        </div>
-        <div className="rounded-2xl border border-border bg-muted/20 p-3.5">
-          <p className="text-sm font-semibold text-foreground">3) Տեսեք թույլատրելի մնալու օրերը</p>
-          <p className="text-xs text-muted-foreground mt-1">Կտեսնեք նաև վերջին թույլատրելի օրը և 180-օրյա պատուհանը:</p>
-        </div>
-      </div>
+      <ol className="divide-y divide-border">
+        <li className="px-6 py-4">
+          <p className="text-sm font-medium text-foreground">
+            {"1. \u0546\u0577\u0565\u0584 \u057A\u056C\u0561\u0576\u0561\u057E\u0578\u0580\u057E\u0561\u056E \u0574\u0578\u0582\u057F\u0584\u056B \u0585\u0580\u0568"}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            {"\u0540\u0561\u0577\u057E\u0561\u0580\u056F\u0568 \u056F\u0561\u057F\u0561\u0580\u057E\u0578\u0582\u0574 \u0567 \u0570\u0565\u0576\u0581 \u0561\u0575\u0564 \u0585\u0580\u057E\u0561 \u0570\u0561\u0574\u0561\u0580\u0589"}
+          </p>
+        </li>
+        <li className="px-6 py-4">
+          <p className="text-sm font-medium text-foreground">
+            {"2. \u0531\u057E\u0565\u056C\u0561\u0581\u0580\u0565\u0584 \u0576\u0561\u056D\u0578\u0580\u0564 \u0578\u0582\u0572\u0587\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580\u0568"}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            {"\u0544\u0578\u0582\u057F\u0584/\u0565\u056C\u0584 \u0585\u0580\u0565\u0580\u0568 \u0576\u0577\u0565\u0584 \u0570\u0576\u0561\u0580\u0561\u057E\u0578\u0580\u056B\u0576\u057D \u0573\u0577\u0563\u0580\u056B\u057F\u0589"}
+          </p>
+        </li>
+        <li className="px-6 py-4">
+          <p className="text-sm font-medium text-foreground">
+            {"3. \u054F\u0565\u057D\u0565\u0584 \u0569\u0578\u0582\u0575\u056C\u0561\u057F\u0580\u0565\u056C\u056B \u0574\u0576\u0561\u056C\u0578\u0582 \u0585\u0580\u0565\u0580\u0568"}
+          </p>
+          <p className="mt-1 text-sm leading-6 text-muted-foreground">
+            {"\u0531\u0574\u0583\u0578\u0583\u0578\u0582\u0574 \u056F\u057F\u0565\u057D\u0576\u0565\u0584 \u0576\u0561\u0587 \u057E\u0565\u0580\u057B\u056B\u0576 \u0569\u0578\u0582\u0575\u056C\u0561\u057F\u0580\u0565\u056C\u056B \u0585\u0580\u0568 \u0587 180-\u0585\u0580\u0575\u0561 \u057A\u0561\u057F\u0578\u0582\u0570\u0561\u0576\u0568\u0589"}
+          </p>
+        </li>
+      </ol>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mt-4">
-        <div className="rounded-xl border border-border px-3 py-2.5 text-xs text-muted-foreground flex items-center gap-2">
-          <Clock3 size={14} className="text-primary" />
-          Տվյալները պահվում են ձեր սարքում
-        </div>
-        <div className="rounded-xl border border-border px-3 py-2.5 text-xs text-muted-foreground flex items-center gap-2">
-          <ShieldCheck size={14} className="text-primary" />
-          Հաշվարկը ավտոմատ թարմացվում է
-        </div>
-        <div className="rounded-xl border border-border px-3 py-2.5 text-xs text-muted-foreground flex items-center gap-2">
-          <BookOpen size={14} className="text-primary" />
-          Միշտ ստուգեք նաև պաշտոնական աղբյուրները
-        </div>
+      <div className="border-t border-border bg-muted/35 px-6 py-4">
+        <ul className="space-y-2 text-sm text-muted-foreground">
+          <li>{"\u054F\u057E\u0575\u0561\u056C\u0576\u0565\u0580\u0568 \u057A\u0561\u0570\u057E\u0578\u0582\u0574 \u0565\u0576 \u0571\u0565\u0580 \u057D\u0561\u0580\u0584\u0578\u0582\u0574\u0589"}</li>
+          <li>{"\u0540\u0561\u0577\u057E\u0561\u0580\u056F\u0568 \u0561\u057E\u057F\u0578\u0574\u0561\u057F \u0569\u0561\u0580\u0574\u0561\u0581\u057E\u0578\u0582\u0574 \u0567 \u0576\u0578\u0580 \u0574\u0578\u0582\u057F\u0584 \u056F\u0561\u0574 \u0578\u0582\u0572\u0587\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576 \u0561\u057E\u0565\u056C\u0561\u0581\u0576\u0565\u056C\u0578\u0582\u0581 \u0570\u0565\u057F\u0578\u0589"}</li>
+          <li>{"\u054E\u0565\u0580\u057B\u0576\u0561\u056F\u0561\u0576 \u0578\u0580\u0578\u0577\u0574\u0561\u0576 \u0570\u0561\u0574\u0561\u0580 \u057D\u057F\u0578\u0582\u0563\u0565\u0584 \u0576\u0561\u0587 \u057A\u0561\u0577\u057F\u0578\u0576\u0561\u056F\u0561\u0576 \u0561\u0572\u0562\u0575\u0578\u0582\u0580\u0576\u0565\u0580\u0568\u0589"}</li>
+        </ul>
       </div>
     </section>
   );

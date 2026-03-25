@@ -13,43 +13,40 @@ const Index = () => {
   } = useSchengenCalculator();
 
   return (
-    <div className="min-h-screen px-4 py-4 md:py-8 max-w-xl mx-auto">
-      <HeroSection />
+    <div className="min-h-screen">
+      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+        <HeroSection />
 
-      {/* THE answer — always visible, always dominant */}
-      <div className="mt-5">
-        <ResultCard
-          result={result}
-          dashboard={dashboard}
-          hasPlannedDate={!!plannedEntry}
-        />
-      </div>
+        <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.45fr)_minmax(320px,0.95fr)]">
+          <div className="space-y-6">
+            <ResultCard
+              result={result}
+              dashboard={dashboard}
+              hasPlannedDate={!!plannedEntry}
+            />
 
-      {/* Input */}
-      <div className="mt-5">
-        <TripInputSection
-          trips={trips}
-          onAddTrip={addTrip}
-          onRemoveTrip={removeTrip}
-          onClearAll={clearAllTrips}
-          plannedEntry={plannedEntry}
-          onPlannedEntryChange={setPlannedEntry}
-          onCalculate={calculate}
-        />
-      </div>
+            <TripInputSection
+              trips={trips}
+              onAddTrip={addTrip}
+              onRemoveTrip={removeTrip}
+              onClearAll={clearAllTrips}
+              plannedEntry={plannedEntry}
+              onPlannedEntryChange={setPlannedEntry}
+              onCalculate={calculate}
+            />
+          </div>
 
-      {/* Visual: gauge + timeline */}
-      <div className="mt-5">
-        <VisualSummary
-          dashboard={dashboard}
-          timelineData={timelineData}
-          result={result}
-        />
-      </div>
+          <div className="space-y-6">
+            <VisualSummary
+              dashboard={dashboard}
+              timelineData={timelineData}
+              result={result}
+            />
 
-      <div className="mt-5 pb-6">
-        <AppGuide />
-      </div>
+            <AppGuide />
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

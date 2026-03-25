@@ -18,22 +18,17 @@ const GaugeChart = ({ used, total, label, sublabel }: Props) => {
   const dashOffset = arcLength * (1 - percentage);
   const rotation = 135;
 
-  const getColor = () => {
-    if (percentage >= 0.9) return "hsl(var(--destructive))";
-    if (percentage >= 0.7) return "hsl(var(--warning))";
-    return "url(#gaugeGradient)";
-  };
+  const strokeColor =
+    percentage >= 0.9
+      ? "hsl(var(--destructive))"
+      : percentage >= 0.7
+        ? "hsl(var(--warning))"
+        : "hsl(var(--primary))";
 
   return (
     <div className="flex flex-col items-center">
       <div className="relative" style={{ width: size, height: size }}>
         <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-          <defs>
-            <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="hsl(var(--primary))" />
-              <stop offset="100%" stopColor="hsl(var(--primary-glow))" />
-            </linearGradient>
-          </defs>
           <circle
             cx={size / 2}
             cy={size / 2}
@@ -49,7 +44,7 @@ const GaugeChart = ({ used, total, label, sublabel }: Props) => {
             cy={size / 2}
             r={radius}
             className="gauge-fill"
-            stroke={getColor()}
+            stroke={strokeColor}
             strokeWidth={strokeWidth}
             strokeDasharray={`${arcLength} ${circumference}`}
             strokeDashoffset={dashOffset}
@@ -57,13 +52,13 @@ const GaugeChart = ({ used, total, label, sublabel }: Props) => {
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-4xl font-extrabold text-foreground leading-none">{remaining}</span>
-          <span className="text-sm text-muted-foreground mt-1">{"\u0574\u0576\u0561\u0581\u0565\u056C \u0567"}</span>
+          <span className="text-4xl font-semibold text-foreground leading-none tracking-[-0.05em]">{remaining}</span>
+          <span className="mt-1 text-sm text-muted-foreground">{"\u0574\u0576\u0561\u0581\u0565\u056C \u0567"}</span>
         </div>
       </div>
-      <div className="text-center mt-2">
-        <div className="text-sm font-semibold text-foreground">{label}</div>
-        <div className="text-xs text-muted-foreground mt-0.5">{sublabel}</div>
+      <div className="mt-3 text-center">
+        <div className="text-sm font-medium text-foreground">{label}</div>
+        <div className="mt-1 text-sm text-muted-foreground">{sublabel}</div>
       </div>
     </div>
   );
