@@ -14,6 +14,7 @@ export interface CalculationResult {
 }
 
 const STORAGE_KEY = "schengen_trips_visual_v1";
+const PLANNED_ENTRY_STORAGE_KEY = "schengen_planned_entry_v1";
 
 function startOfDay(date: Date): Date {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
@@ -97,19 +98,40 @@ function saveTrips(trips: Trip[]) {
   );
 }
 
+function loadPlannedEntry(): string {
+  try {
+    const raw = localStorage.getItem(PLANNED_ENTRY_STORAGE_KEY);
+    if (!raw) return "";
+    const parsed = new Date(raw + "T00:00:00");
+    if (isNaN(parsed.getTime())) return "";
+    return raw;
+  } catch {
+    return "";
+  }
+}
+
+function savePlannedEntry(value: string) {
+  if (!value) {
+    localStorage.removeItem(PLANNED_ENTRY_STORAGE_KEY);
+    return;
+  }
+  localStorage.setItem(PLANNED_ENTRY_STORAGE_KEY, value);
+}
+
 export function useSchengenCalculator() {
   const [trips, setTrips] = useState<Trip[]>(() => normalizeAndMerge(loadTrips()));
-  const [plannedEntry, setPlannedEntry] = useState<string>("");
+  const [plannedEntry, setPlannedEntry] = useState<string>(() => loadPlannedEntry());
   const [result, setResult] = useState<CalculationResult | null>(null);
 
   useEffect(() => { saveTrips(trips); }, [trips]);
+  useEffect(() => { savePlannedEntry(plannedEntry); }, [plannedEntry]);
 
   const addTrip = useCallback((entryStr: string, exitStr: string): string | null => {
-    if (!entryStr || !exitStr) return "Խնdelays delays";
+    if (!entryStr || !exitStr) return "Խնդրում ենք լրացնել մուտքի և ելքի օրերը։";
     const entry = new Date(entryStr + "T00:00:00");
     const exit = new Date(exitStr + "T00:00:00");
-    if (isNaN(entry.getTime()) || isNaN(exit.getTime())) return "Անdelays delays";
-    if (exit < entry) return " Delays delays delays";
+    if (isNaN(entry.getTime()) || isNaN(exit.getTime())) return "Ամսաթվի ձևաչափը սխալ է։";
+    if (exit < entry) return "Ելքի օրը չի կարող մուտքից շուտ լինել։";
     setTrips((prev) => normalizeAndMerge([...prev, { entry, exit }]));
     setResult(null);
     return null;
@@ -161,6 +183,14 @@ export function useSchengenCalculator() {
     const usedOnLastAllowed = countDaysInWindow(finalIntervals, finalWindowStart, lastAllowedDate);
     setResult({ type: "success", maxDays, lastAllowedDate, usedBefore, usedOnLastAllowed });
   }, [plannedDate, trips]);
+
+  useEffect(() => {
+    if (!plannedDate) {
+      setResult(null);
+      return;
+    }
+    calculate();
+  }, [plannedDate, trips, calculate]);
 
   const timelineData = useMemo(() => {
     if (!plannedDate) return null;
