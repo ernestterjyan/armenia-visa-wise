@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import TripInputSection from "@/components/TripInputSection";
 import VisualSummary from "@/components/VisualSummary";
 import ResultCard from "@/components/ResultCard";
+import AppGuide from "@/components/AppGuide";
 
 const Index = () => {
   const {
@@ -44,6 +45,10 @@ const Index = () => {
           timelineData={timelineData}
           result={result}
         />
+      </div>
+
+      <div className="mt-5 pb-6">
+        <AppGuide />
       </div>
     </div>
   );

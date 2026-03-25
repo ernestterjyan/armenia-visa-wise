@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Trip, formatDateStr, diffDaysInclusive } from "@/hooks/useSchengenCalculator";
-import { Plus, Trash2, Plane } from "lucide-react";
+import { Plus, Trash2, Plane, Info } from "lucide-react";
 
 interface Props {
   trips: Trip[];
@@ -58,13 +58,25 @@ const TripInputSection = ({ trips, onAddTrip, onRemoveTrip, onClearAll, plannedE
           onChange={(e) => onPlannedEntryChange(e.target.value)}
           className="w-full rounded-2xl border border-input bg-background px-4 py-3.5 text-sm outline-none focus:border-primary focus:ring-2 focus:ring-ring/10 transition-all"
         />
-        <button
-          onClick={onCalculate}
-          className="w-full mt-4 rounded-2xl px-5 py-3.5 text-sm font-bold text-primary-foreground transition-all active:scale-[0.98]"
-          style={{ background: "var(--gradient-hero)", boxShadow: "var(--shadow-soft)" }}
-        >
-          {"\u0540\u0561\u0577\u057E\u0565\u056C \u0570\u0576\u0561\u0580\u0561\u057E\u0578\u0580 \u0585\u0580\u0565\u0580\u0568"}
-        </button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4">
+          <button
+            onClick={onCalculate}
+            className="rounded-2xl px-5 py-3.5 text-sm font-bold text-primary-foreground transition-all active:scale-[0.98]"
+            style={{ background: "var(--gradient-hero)", boxShadow: "var(--shadow-soft)" }}
+          >
+            {"\u054E\u0565\u0580\u0561\u0570\u0561\u0577\u057E\u0561\u0580\u056F\u0565\u056C"}
+          </button>
+          <button
+            type="button"
+            onClick={() => onPlannedEntryChange(formatDateStr(new Date()))}
+            className="rounded-2xl border border-border px-5 py-3.5 text-sm font-semibold text-foreground hover:bg-muted transition-all"
+          >
+            {"\u0534\u0576\u0565\u056C \u0561\u0575\u057D\u0585\u0580\u057E\u0561 \u0585\u0580\u0568"}
+          </button>
+        </div>
+        <p className="mt-2 text-xs text-muted-foreground">
+          {"\u0540\u0561\u0577\u057E\u0561\u0580\u056F\u0568 \u0569\u0561\u0580\u0574\u0561\u0581\u057E\u0578\u0582\u0574 \u0567 \u0561\u057E\u057F\u0578\u0574\u0561\u057F \u0581\u0561\u0576\u056F\u0561\u0581\u0561\u056E \u0583\u0578\u0583\u0578\u056D\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u056B\u0581 \u0570\u0565\u057F\u0578\u0589"}
+        </p>
       </div>
 
       {/* Past trips */}
@@ -97,12 +109,18 @@ const TripInputSection = ({ trips, onAddTrip, onRemoveTrip, onClearAll, plannedE
                 </div>
                 <button
                   onClick={() => onRemoveTrip(i)}
-                  className="opacity-0 group-hover:opacity-100 focus:opacity-100 p-2 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/8 transition-all"
+                  className="opacity-100 sm:opacity-0 sm:group-hover:opacity-100 focus:opacity-100 p-2 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/8 transition-all"
+                  aria-label="Ջնջել ուղևորությունը"
                 >
                   <Trash2 size={15} />
                 </button>
               </div>
             ))}
+          </div>
+        )}
+        {sortedTrips.length === 0 && (
+          <div className="rounded-2xl bg-muted/20 border border-dashed border-border p-4 mb-4 text-center text-xs text-muted-foreground">
+            {"\u0531\u057C\u0561\u0575\u056A\u0574 \u0578\u0582\u0572\u0587\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576 \u0579\u056F\u0561\u0589 \u0531\u057E\u0565\u056C\u0561\u0581\u0580\u0565\u0584 \u0561\u057C\u0561\u057B\u056B\u0576 \u0563\u0580\u0561\u0576\u0581\u0578\u0582\u0574\u0568\u0589"}
           </div>
         )}
 
@@ -141,6 +159,15 @@ const TripInputSection = ({ trips, onAddTrip, onRemoveTrip, onClearAll, plannedE
             {"\u0531\u057E\u0565\u056C\u0561\u0581\u0576\u0565\u056C \u0578\u0582\u0572\u0587\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576"}
           </button>
         )}
+
+        <div className="mt-4 rounded-2xl bg-muted/30 border border-border p-3.5">
+          <div className="flex items-start gap-2">
+            <Info size={15} className="text-primary mt-0.5 shrink-0" />
+            <p className="text-xs text-muted-foreground leading-relaxed">
+              {"\u0533\u0580\u0561\u0576\u0581\u0565\u0584 \u0562\u0578\u056C\u0578\u0580 \u0574\u0578\u0582\u057F\u0584/\u0565\u056C\u0584 \u0566\u0578\u0582\u0575\u0563\u0565\u0580\u0568\u055D \u0576\u0578\u0582\u0575\u0576\u056B\u057D\u056F \u0565\u0569\u0565 \u0574\u056B \u0584\u0561\u0576\u056B \u0561\u0576\u0563\u0561\u0574 \u0574\u0578\u0582\u057F\u0584 \u0565\u0584 \u0563\u0578\u0580\u056E\u0565\u056C \u0576\u0578\u0582\u0575\u0576 \u0561\u0574\u057D\u057E\u0561 \u0568\u0576\u0569\u0561\u0581\u0584\u0578\u0582\u0574\u0589"}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
