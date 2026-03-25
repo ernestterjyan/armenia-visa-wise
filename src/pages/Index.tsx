@@ -12,11 +12,11 @@ const Index = () => {
   } = useSchengenCalculator();
 
   return (
-    <div className="min-h-screen px-4 py-6 md:py-10 max-w-2xl mx-auto">
+    <div className="min-h-screen px-4 py-4 md:py-8 max-w-xl mx-auto">
       <HeroSection />
 
-      {/* Main result card - the hero answer */}
-      <div className="mt-8">
+      {/* THE answer — always visible, always dominant */}
+      <div className="mt-5">
         <ResultCard
           result={result}
           dashboard={dashboard}
@@ -24,8 +24,8 @@ const Index = () => {
         />
       </div>
 
-      {/* Input section */}
-      <div className="mt-6">
+      {/* Input */}
+      <div className="mt-5">
         <TripInputSection
           trips={trips}
           onAddTrip={addTrip}
@@ -37,8 +37,8 @@ const Index = () => {
         />
       </div>
 
-      {/* Visual summary - gauge + timeline */}
-      <div className="mt-6">
+      {/* Visual: gauge + timeline */}
+      <div className="mt-5">
         <VisualSummary
           dashboard={dashboard}
           timelineData={timelineData}
