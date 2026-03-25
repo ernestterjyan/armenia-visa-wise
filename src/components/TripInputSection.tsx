@@ -46,7 +46,7 @@ const TripInputSection = ({ trips, onAddTrip, onRemoveTrip, onClearAll, plannedE
         <h2 className="text-lg font-semibold text-foreground">
           {"\u054F\u057E\u0575\u0561\u056C\u0576\u0565\u0580"}
         </h2>
-        <p className="mt-1 text-sm leading-6 text-muted-foreground">
+        <p className="mt-1 text-sm leading-7 text-muted-foreground">
           {"\u054D\u056F\u057D\u0565\u0584 \u057A\u056C\u0561\u0576\u0561\u057E\u0578\u0580\u057E\u0561\u056E \u0574\u0578\u0582\u057F\u0584\u056B \u0585\u0580\u0568 \u0576\u0577\u0565\u056C\u0578\u0582\u0581, \u0570\u0565\u057F\u0578 \u0561\u057E\u0565\u056C\u0561\u0581\u0580\u0565\u0584 \u0562\u0578\u056C\u0578\u0580 \u0576\u0561\u056D\u0578\u0580\u0564 \u0578\u0582\u0572\u0587\u0578\u0580\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u0576\u0565\u0580\u0568\u0589"}
         </p>
       </div>
@@ -77,7 +77,7 @@ const TripInputSection = ({ trips, onAddTrip, onRemoveTrip, onClearAll, plannedE
             {"\u0540\u0561\u0577\u057E\u0565\u056C"}
           </button>
         </div>
-        <p className="mt-3 text-sm leading-6 text-muted-foreground">
+        <p className="mt-3 text-sm leading-7 text-muted-foreground">
           {"\u0540\u0561\u0577\u057E\u0561\u0580\u056F\u0568 \u0561\u057E\u057F\u0578\u0574\u0561\u057F \u0569\u0561\u0580\u0574\u0561\u0581\u057E\u0578\u0582\u0574 \u0567 \u0561\u0574\u0565\u0576 \u0583\u0578\u0583\u0578\u056D\u0578\u0582\u0569\u0575\u0578\u0582\u0576\u056B\u0581 \u0570\u0565\u057F\u0578\u0589"}
         </p>
       </div>
@@ -141,8 +141,11 @@ const TripInputSection = ({ trips, onAddTrip, onRemoveTrip, onClearAll, plannedE
             {sortedTrips.map((trip, i) => (
               <div
                 key={i}
-                className="grid gap-3 border-b border-border bg-background px-4 py-4 last:border-b-0 sm:grid-cols-[minmax(0,1fr)_auto]"
+                className="grid gap-3 border-b border-border bg-background px-4 py-4 last:border-b-0 sm:grid-cols-[140px_minmax(0,1fr)_auto]"
               >
+                <div className="font-mono text-sm text-muted-foreground">
+                  {String(i + 1).padStart(2, "0")}
+                </div>
                 <div>
                   <div className="text-sm font-medium text-foreground">
                     {formatDateStr(trip.entry)} → {formatDateStr(trip.exit)}
@@ -168,8 +171,8 @@ const TripInputSection = ({ trips, onAddTrip, onRemoveTrip, onClearAll, plannedE
         )}
       </div>
 
-      <div className="border-t border-border bg-muted/35 px-6 py-4">
-        <p className="text-sm leading-6 text-muted-foreground">
+      <div className="border-t border-border bg-secondary px-6 py-4">
+        <p className="text-sm leading-7 text-muted-foreground">
           {"\u0533\u0580\u0561\u0576\u0581\u0565\u0584 \u0562\u0578\u056C\u0578\u0580 \u0574\u0578\u0582\u057F\u0584/\u0565\u056C\u0584 \u0566\u0578\u0582\u0575\u0563\u0565\u0580\u0568, \u0576\u0578\u0582\u0575\u0576\u056B\u057D\u056F \u0565\u0569\u0565 \u0574\u056B \u0584\u0561\u0576\u056B \u0561\u0576\u0563\u0561\u0574 \u0565\u0584 \u0574\u0578\u0582\u057F\u0584 \u0563\u0578\u0580\u056E\u0565\u056C \u0576\u0578\u0582\u0575\u0576 \u0561\u0574\u057D\u057E\u0561 \u0568\u0576\u0569\u0561\u0581\u0584\u0578\u0582\u0574\u0589"}
         </p>
       </div>

@@ -13,6 +13,18 @@ export interface CalculationResult {
   usedOnLastAllowed: number;
 }
 
+export interface ComparisonOption {
+  date: Date;
+  label: string;
+  result: CalculationResult;
+}
+
+export interface AvailabilityOption {
+  minimumStay: number;
+  date: Date | null;
+  waitDays: number | null;
+}
+
 const STORAGE_KEY = "schengen_trips_visual_v1";
 const PLANNED_ENTRY_STORAGE_KEY = "schengen_planned_entry_v1";
 
@@ -36,6 +48,11 @@ export function formatDateStr(date: Date): string {
 export function diffDaysInclusive(start: Date, end: Date): number {
   const msPerDay = 24 * 60 * 60 * 1000;
   return Math.floor((startOfDay(end).getTime() - startOfDay(start).getTime()) / msPerDay) + 1;
+}
+
+function diffDays(start: Date, end: Date): number {
+  const msPerDay = 24 * 60 * 60 * 1000;
+  return Math.floor((startOfDay(end).getTime() - startOfDay(start).getTime()) / msPerDay);
 }
 
 function normalizeAndMerge(intervals: Trip[]): Trip[] {
@@ -72,6 +89,35 @@ export function overlapInterval(interval: Trip, windowStart: Date, windowEnd: Da
   const end = interval.exit < windowEnd ? interval.exit : windowEnd;
   if (start <= end) return { entry: start, exit: end };
   return null;
+}
+
+function calculateOutcome(trips: Trip[], plannedDate: Date): CalculationResult {
+  const usedBefore = countDaysInWindow(trips, addDays(plannedDate, -179), addDays(plannedDate, -1));
+  let maxDays = 0;
+
+  for (let i = 0; i < 90; i++) {
+    const currentDate = addDays(plannedDate, i);
+    const windowStart = addDays(currentDate, -179);
+    const simulatedStay: Trip = { entry: plannedDate, exit: currentDate };
+    const allIntervals = normalizeAndMerge([...trips, simulatedStay]);
+    const daysInWindow = countDaysInWindow(allIntervals, windowStart, currentDate);
+    if (daysInWindow <= 90) {
+      maxDays = i + 1;
+    } else {
+      break;
+    }
+  }
+
+  if (maxDays === 0) {
+    return { type: "error", maxDays: 0, lastAllowedDate: null, usedBefore, usedOnLastAllowed: usedBefore };
+  }
+
+  const lastAllowedDate = addDays(plannedDate, maxDays - 1);
+  const finalWindowStart = addDays(lastAllowedDate, -179);
+  const finalIntervals = normalizeAndMerge([...trips, { entry: plannedDate, exit: lastAllowedDate }]);
+  const usedOnLastAllowed = countDaysInWindow(finalIntervals, finalWindowStart, lastAllowedDate);
+
+  return { type: "success", maxDays, lastAllowedDate, usedBefore, usedOnLastAllowed };
 }
 
 function loadTrips(): Trip[] {
@@ -163,25 +209,7 @@ export function useSchengenCalculator() {
 
   const calculate = useCallback(() => {
     if (!plannedDate) return;
-    const usedBefore = countDaysInWindow(trips, addDays(plannedDate, -179), addDays(plannedDate, -1));
-    let maxDays = 0;
-    for (let i = 0; i < 90; i++) {
-      const currentDate = addDays(plannedDate, i);
-      const windowStart = addDays(currentDate, -179);
-      const simulatedStay: Trip = { entry: plannedDate, exit: currentDate };
-      const allIntervals = normalizeAndMerge([...trips, simulatedStay]);
-      const daysInWindow = countDaysInWindow(allIntervals, windowStart, currentDate);
-      if (daysInWindow <= 90) { maxDays = i + 1; } else { break; }
-    }
-    if (maxDays === 0) {
-      setResult({ type: "error", maxDays: 0, lastAllowedDate: null, usedBefore, usedOnLastAllowed: usedBefore });
-      return;
-    }
-    const lastAllowedDate = addDays(plannedDate, maxDays - 1);
-    const finalWindowStart = addDays(lastAllowedDate, -179);
-    const finalIntervals = normalizeAndMerge([...trips, { entry: plannedDate, exit: lastAllowedDate }]);
-    const usedOnLastAllowed = countDaysInWindow(finalIntervals, finalWindowStart, lastAllowedDate);
-    setResult({ type: "success", maxDays, lastAllowedDate, usedBefore, usedOnLastAllowed });
+    setResult(calculateOutcome(trips, plannedDate));
   }, [plannedDate, trips]);
 
   useEffect(() => {
@@ -200,5 +228,64 @@ export function useSchengenCalculator() {
     return { windowStart, windowEnd, trips: relevant, totalDays: 180 };
   }, [plannedDate, trips]);
 
-  return { trips, plannedEntry, setPlannedEntry, addTrip, removeTrip, clearAllTrips, dashboard, result, calculate, timelineData };
+  const comparisonOptions = useMemo<ComparisonOption[]>(() => {
+    if (!plannedDate) return [];
+
+    const options = [
+      { offset: 0, label: "Ընտրված օրը" },
+      { offset: 3, label: "3 օր հետո" },
+      { offset: 7, label: "1 շաբաթ հետո" },
+      { offset: 14, label: "2 շաբաթ հետո" },
+      { offset: 30, label: "1 ամիս հետո" },
+    ];
+
+    return options.map(({ offset, label }) => {
+      const date = addDays(plannedDate, offset);
+      return {
+        date,
+        label,
+        result: calculateOutcome(trips, date),
+      };
+    });
+  }, [plannedDate, trips]);
+
+  const availabilityOptions = useMemo<AvailabilityOption[]>(() => {
+    if (!plannedDate) return [];
+
+    const minimumStays = [1, 7, 14, 30];
+
+    return minimumStays.map((minimumStay) => {
+      let match: Date | null = null;
+
+      for (let offset = 0; offset <= 365; offset++) {
+        const candidateDate = addDays(plannedDate, offset);
+        const candidateResult = calculateOutcome(trips, candidateDate);
+        if (candidateResult.maxDays >= minimumStay) {
+          match = candidateDate;
+          break;
+        }
+      }
+
+      return {
+        minimumStay,
+        date: match,
+        waitDays: match ? diffDays(plannedDate, match) : null,
+      };
+    });
+  }, [plannedDate, trips]);
+
+  return {
+    trips,
+    plannedEntry,
+    setPlannedEntry,
+    addTrip,
+    removeTrip,
+    clearAllTrips,
+    dashboard,
+    result,
+    calculate,
+    timelineData,
+    comparisonOptions,
+    availabilityOptions,
+  };
 }

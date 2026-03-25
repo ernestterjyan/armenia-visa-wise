@@ -4,53 +4,54 @@
 
 @layer base {
   :root {
-    --background: 32 24% 96%;
-    --foreground: 24 63% 15%;
+    color-scheme: dark;
+    --background: 24 9% 8%;
+    --foreground: 32 21% 92%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 24 63% 15%;
+    --card: 24 8% 11%;
+    --card-foreground: 32 21% 92%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 24 63% 15%;
+    --popover: 24 8% 11%;
+    --popover-foreground: 32 21% 92%;
 
-    --primary: 30 83% 37%;
-    --primary-foreground: 0 0% 100%;
-    --primary-soft: 30 70% 93%;
+    --primary: 28 71% 56%;
+    --primary-foreground: 24 9% 8%;
+    --primary-soft: 28 34% 18%;
 
-    --secondary: 34 28% 92%;
-    --secondary-foreground: 24 40% 22%;
+    --secondary: 26 8% 16%;
+    --secondary-foreground: 32 16% 86%;
 
-    --muted: 35 22% 92%;
-    --muted-foreground: 24 14% 38%;
+    --muted: 24 8% 15%;
+    --muted-foreground: 27 10% 62%;
 
-    --accent: 158 89% 31%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 156 34% 42%;
+    --accent-foreground: 32 21% 96%;
 
-    --destructive: 0 68% 52%;
+    --destructive: 7 61% 53%;
     --destructive-foreground: 0 0% 100%;
 
-    --success: 158 73% 31%;
-    --success-foreground: 156 100% 14%;
-    --success-bg: 154 42% 95%;
-    --success-border: 155 27% 78%;
+    --success: 156 33% 46%;
+    --success-foreground: 32 21% 96%;
+    --success-bg: 156 18% 16%;
+    --success-border: 156 18% 26%;
 
-    --warning: 31 89% 45%;
-    --warning-foreground: 25 70% 25%;
-    --warning-bg: 34 100% 95%;
-    --warning-border: 32 70% 78%;
+    --warning: 32 65% 54%;
+    --warning-foreground: 24 9% 8%;
+    --warning-bg: 29 29% 15%;
+    --warning-border: 29 31% 26%;
 
-    --error-bg: 12 60% 95%;
-    --error-foreground: 7 61% 33%;
-    --error-border: 9 48% 80%;
+    --error-bg: 8 24% 16%;
+    --error-foreground: 10 78% 72%;
+    --error-border: 8 25% 28%;
 
-    --border: 30 16% 84%;
-    --input: 30 16% 84%;
-    --ring: 30 83% 37%;
+    --border: 24 8% 22%;
+    --input: 24 8% 19%;
+    --ring: 28 71% 56%;
 
     --radius: 0.75rem;
 
-    --shadow-soft: 0 1px 2px hsla(24, 25%, 20%, 0.06);
-    --shadow-card: 0 18px 40px -32px hsla(24, 30%, 10%, 0.28);
+    --shadow-soft: 0 1px 2px hsla(0, 0%, 0%, 0.18);
+    --shadow-card: 0 28px 50px -36px hsla(0, 0%, 0%, 0.7);
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -76,9 +77,11 @@
     @apply text-foreground antialiased;
     background-color: hsl(var(--background));
     background-image:
-      linear-gradient(hsla(24, 20%, 24%, 0.04) 1px, transparent 1px),
-      linear-gradient(90deg, hsla(24, 20%, 24%, 0.04) 1px, transparent 1px);
-    background-size: 24px 24px;
+      radial-gradient(circle at top left, hsla(28, 76%, 32%, 0.18), transparent 30%),
+      radial-gradient(circle at top right, hsla(156, 28%, 26%, 0.12), transparent 26%),
+      linear-gradient(hsla(0, 0%, 100%, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, hsla(0, 0%, 100%, 0.035) 1px, transparent 1px);
+    background-size: auto, auto, 24px 24px, 24px 24px;
     min-height: 100vh;
     font-family: "Noto Sans Armenian", "SF Pro Text", "Helvetica Neue", sans-serif;
   }
